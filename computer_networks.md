@@ -19,3 +19,18 @@ When you make a request to some server (let's say `google.com`), the server will
 
 - **Modem**: Converts digital signals into analog signals (and vice versa).
 - **Router**: Routes data to the correct devices.
+
+OSI model : open Systems interconnection
+
+Application Layer: it is the code from where you start the data transport using protocols like HTTP, HTTPs, FTP, Telnet, SMTP etc.
+
+Presentation Layer: transform data in binary or machine understandable format, perform encryption and compression. SSL protocol is used for securing the data.
+
+Session Layer: Authentication & Authorization
+
+Transport Layer: data segmentaion done on this layer, each segment contains port number and sequence number. It also work on flow control(like if the server can be able to send at 40Mbps but client can't receive it at that speed then it controls that). error control(like in TCP, it does it using acknoledgment, if any segment or package fails then retransmit that)
+
+Network Layer: handles transmission of data on nodes that are in another networks. this is the layer where router is get used. It assigns sender's and receiver's IP address to the data packets.
+
+Data-link Layer:
+Physical Layer:
