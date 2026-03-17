@@ -34,3 +34,20 @@ Network Layer: handles transmission of data on nodes that are in another network
 
 Data-link Layer:
 Physical Layer:
+
+Repeater: It operates at physical layer. Its job is to regenerate the signal over same network before it becomes too weak or corrupted so as to extend the length to which the signal can be transmitted over the same network. They do not amplify the signal. when signal becomes too weak, they copy signal bit by bit and regenerate it at it's original strength. It is a two port device.
+
+Hub: Hub is basically a multiport repeater. A hub connects multiple wires coming from different branches, for example connector in star topology which connects different stations. Hubs cannot filter data so data packets are sent to all the connected devices. Also they do not have intelligence to determine the best path for the data packets which leads to inefficiency and wastage.
+
+read about types of hub
+bridge: type of repeater with additional functionality to filter out the data packets using mac addresses. It operates at data link layer.
+switch: multi port bridge with some additional functionality like error checking etc. read more about it.
+
+protocols:
+HTTP: hyper text transfer protocol
+DHCP : to assign IPs to the connected devices on the network.
+FTP: file transfer protocol, not much used today.
+SMTP: to send mail
+POP3 & IMAC: to receive email
+SSH: to login into another machine
+telnet
