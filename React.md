@@ -1,14 +1,55 @@
-```markdown
+````markdown
 # jsx, props, state, event listeners
 
-## state : 
+## How react rendering works and why it is so fast?
+
+React Internals: JSX, Virtual DOM, and Reconciliation
+
+1. JSX and JavaScript Objects
+   The Blueprint: React elements are plain JavaScript objects.
+
+The Compilation: Compilers like Babel or SWC parse JSX. In modern React (17+), they convert JSX into special functions (e.g., \_jsx) that return these UI objects.
+
+The Creation: You can observe these objects by looking at the output of React.createElement('div', { props }, children).
+
+The Tree: React maintains a tree of these objects known as the Virtual DOM.
+
+2. The Update Cycle (Render & Commit)
+   When a state variable changes, React doesn't immediately touch the browser. It goes through two distinct phases:
+
+Phase A: The Render Phase (Reconciliation)
+
+New Tree: React creates a new Virtual DOM tree based on the updated state.
+
+The Diffing: React compares the Old Virtual DOM with the New Virtual DOM.
+
+React Fiber: This is the internal engine that manages this comparison. It’s "incremental," meaning it can pause heavy work to keep the browser responsive.
+
+The Strategy: React uses a "Heuristic Diffing Algorithm" to find the minimum number of changes needed.
+
+Key Optimization: If a node has a unique key, React can track it across renders instead of re-creating it.
+
+Phase B: The Commit Phase
+
+DOM Manipulation: Once the differences are calculated, React (via react-dom) applies only those specific changes to the real browser DOM.
+
+Efficiency: If only one word in a paragraph changes, React only updates that text node, not the entire page.
+
+3. Advanced Mechanics to Remember
+   Automatic Batching: If you update multiple state variables at once, React "batches" them. It performs one single Reconciliation/Commit cycle for all updates to maximize performance.
+
+Immutability: React relies on state being "immutable." It checks if the reference of the state object has changed. If you mutate an object directly (e.g., myState.name = 'New'), React might not realize a change happened and won't trigger a re-render.
+
+## state :
+
 when you want UI to be updated based on some variable , that variable should be stored as a state variable.
 
-example : 
-```javascript
-const [stateVar,setStateVar] = useState(initialValue);
+example :
 
+```javascript
+const [stateVar, setStateVar] = useState(initialValue);
 ```
+````
 
 `useState(initialValue)` do two things
 
@@ -23,8 +64,8 @@ suppose you want to increment the counter var based on button click.
 
 ```javascript
 onClickHandle() {
-  setCounter(counter+1); 
-  // OR 
+  setCounter(counter+1);
+  // OR
   setCounter( (prevCounter) => prevCounter + 1);
 }
 
@@ -36,7 +77,7 @@ when you pass a function in `setState()` function that callback function automat
 counter = 2;
 onClickHandle() {
   setCounter(counter+1); // 2+1
-  setCounter(counter+2); // 2+1 
+  setCounter(counter+2); // 2+1
 }
 
 ```
@@ -63,7 +104,7 @@ styles in react are not scoped by default.
 you can scope styles in react in below ways.
 
 1. **css modules** => add `.module` in css file names and the build tool like vite will generate scoped style rules for you. example css fileName = `abc.module.css`
-you have to import this css files like `import classes from 'abc.module.css'` and then you can use classes defined inside that css file like `classes.className`
+   you have to import this css files like `import classes from 'abc.module.css'` and then you can use classes defined inside that css file like `classes.className`
 2. **styled components** =>
 
 ---
@@ -74,12 +115,10 @@ you have to import this css files like `import classes from 'abc.module.css'` an
 
 ```javascript
 const inputRef = useRef(); // this way you can createReference variable and bind that to input element using following way
-
 ```
 
 ```jsx
-<input ref={inputRef} /> 
-
+<input ref={inputRef} />
 ```
 
 when the value of ref element changes component won't get rerendered like it get in state changes
