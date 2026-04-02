@@ -132,3 +132,25 @@ In older react versions you have to use `forwardRef` function to wrap the compon
 
 this hook is help us to expose any function or property to other components.
 It's been used when ref is forwarded to the component that wants to expose the functions or properties. It takes two arguments first is ref variable and the second one is the callback function which returns the object that has the functions and properties you want to expose.
+
+## implement React router:
+
+one library you can use is react-router. this gives you functions to createmultiple router like createBrowserRouter(), createHashRouter() etc. you can call it like below.
+
+const router = createBrowserRouter({
+path: '',
+element: <ReactComponent/>,
+errorElement: <Error/>
+},
+{
+path: '/Contact',
+element: <ContactComponent/>
+}
+)
+
+and you can render router element like below.
+
+<RouterProvider router={router}/>
+
+if you get any error or you want to load 404 not found component you can configure errorElement over there in route config.
+if you want error information in that 404 not found component then u can use useRouteError() hook.
