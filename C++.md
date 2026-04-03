@@ -40,3 +40,13 @@ Here are some use cases in which you can see use of pointer:
         For data of data type int or char, it won't make any sense of 64 bit OS . because int data takes 4 byte and char needs 4 bytes. while on 64 bit system memory address is too long and require 8 bytes.
 
         But for large data it will very useful. here is how: As execution of any function starts c++ engine creates brand new execution context or stack memory area for that function to store it's args and local variables. when you call the function, C++ copies the data in the memory of that function. So now you can't change the data outside of this function and copying large data will be expensive. So here pointer comes in picture. you can pass pointer variables to the function, so now you can change the value stored in that memory address. And when the function execution starts it only copies the pointer variable (the address) in function's stack frame so the big data (file of 2GB) won't get copied again in the function and we can save here more time and memory.
+
+Types of Memory:
+
+    Stack memory: Stack is fast and automatic. when your function starts OS assigns a stack memory and ruthlessly deletes everything when it ends.
+
+    Heap Memory: Stack is okay when you need small amount of memory temporary. But when you need memory while running your program on the fly. Then Heap comes to the picture. Heap is massive amount of RAM(Gigabytes of it). Stack memory gets deallocated when your function ends. But when you request heap memory from OS then OS marks it for taken and it will marked as taken until you yourself deallocate it. If you got some memory from heap and you forgot to delete and your program ends or you loose the reference to that memory then it will be marked as taken until you completely restart your computer. no other program can use it.
+
+In c++ you can request heap memory using new keyword and delete it using delete keyword.
+
+In higher level languages like javascript, python and java. garbage collector works for you to deallocate the memory when there is no accessible reference to that memory in your program. but If there is atleast one accessible refernce then it won't get deleted.
