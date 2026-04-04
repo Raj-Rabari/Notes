@@ -22,7 +22,8 @@ Program execution flow:
     3. Assembler takes the assembly language code generated above and convert it to binary 0s and 1s which computer can understand. It still not ready to run. Because if you use any library like iostream. preprocessor just copy the header files(which contains declarations) in source code. The actucal implementation of it is in compiled binary form which is linked by linker at next step.
     4. Linker links the binary implementaion of libarries you used in your code.
 
-Pointer Variable:
+# Pointer Variable:
+
 We can get physical address using the & operator but we can't store them for later user in normal variables. Memory address is a special type of data and you will need pointer variables to store the address in variables.
 
 There are two faces of "\*" :
@@ -41,12 +42,64 @@ Here are some use cases in which you can see use of pointer:
 
         But for large data it will very useful. here is how: As execution of any function starts c++ engine creates brand new execution context or stack memory area for that function to store it's args and local variables. when you call the function, C++ copies the data in the memory of that function. So now you can't change the data outside of this function and copying large data will be expensive. So here pointer comes in picture. you can pass pointer variables to the function, so now you can change the value stored in that memory address. And when the function execution starts it only copies the pointer variable (the address) in function's stack frame so the big data (file of 2GB) won't get copied again in the function and we can save here more time and memory.
 
-Types of Memory:
+flaws of pointer:
+
+    when you pass pointer variable to any function to read or modify it's data. that pointer may be pointing to null pointer and dereferencing (*) null pointer will crash your program.
+
+# Types of Memory:
 
     Stack memory: Stack is fast and automatic. when your function starts OS assigns a stack memory and ruthlessly deletes everything when it ends.
 
     Heap Memory: Stack is okay when you need small amount of memory temporary. But when you need memory while running your program on the fly. Then Heap comes to the picture. Heap is massive amount of RAM(Gigabytes of it). Stack memory gets deallocated when your function ends. But when you request heap memory from OS then OS marks it for taken and it will marked as taken until you yourself deallocate it. If you got some memory from heap and you forgot to delete and your program ends or you loose the reference to that memory then it will be marked as taken until you completely restart your computer. no other program can use it.
 
-In c++ you can request heap memory using new keyword and delete it using delete keyword.
+    In c++ you can request heap memory using new keyword and delete it using delete keyword.
 
-In higher level languages like javascript, python and java. garbage collector works for you to deallocate the memory when there is no accessible reference to that memory in your program. but If there is atleast one accessible refernce then it won't get deleted.
+    In higher level languages like javascript, python and java. garbage collector works for you to deallocate the memory when there is no accessible reference to that memory in your program. but If there is atleast one accessible refernce then it won't get deleted.
+
+# Smart Pointers & RAII (Resource Aquisition is initialization):
+
+    A Smart pointer is a class that lives on the stack, but inside it  secretly keeps raw pointer to heap memory block. when function ends OS destroys smart pointer on the stack but the smart pointer's "dying breath" automatically triggers delete command on heap memory it owns. This concept known as RAII.
+
+    most commonly used smart pointer is standard libraries "unique_ptr". unique keyword here is important , It means exclusive ownership. only one unique_ptr allowed to own specific block of heap memory at a time. If two smart pointers owned a same memory block, They would both try to delete it when the function ended, causes massive crash known as "double free" error.
+
+    Because of this strict ownership rule, passing smart pointer to another function require special move to temporarily hand over the keys.
+
+    when you try to pass any variable to any funciton c++ create its copy. now when you try to pass smart pointers normal way, it fails at compile time. because when your function ends it's copy try to delete it and when the main function ends the original one try to delete the same again. which causes "double free" error. To prevent this, compiler blocks copying directly.
+
+# References:
+
+    References are just another name of the box that already exist. It's an alias. if we pass pointer to the function then it could be pointing to the null ptr and dereferencing(*) that variable will throw an error. so every time we use pointer variable we need to check that it is not holding null pointer. but if we pass reference of the variable then it will never point to null pointer because we are just creating another reference to the value that exist already. and also you don't need to use * to dereference it everytime.
+
+    It is pointer variable under the hood. & is just syntactic sugar. Reference cannot be reassigned to anything else.
+
+    But if you pass any data by reference to any function it can change or modify the data. But if your purpose to passing the reference so that function can only read it but not modify then use const keyword. this way you can pass readonly variable reference.
+
+# use case decisions:
+
+    1. if the data is small like int, bool or char etc. pass by value. copying 4 bytes is so fast the cpu doesn't even blink.
+    2. if the data is large and you need to change it pass by reference (Type &varibaleName)
+    3. if data is large and you just want to read it then pass it as constant reference(const Type &variableName)
+
+# OOPS:
+
+    when you create a class you are asking compiler that give me these amount of memroy side by side. It's an array that can hold different datatypes.
+
+    Struct VS Class
+
+    Struct comes from c. By default everything inside it is public.
+    Class introduced in c++. By default everything inside it is private.
+
+    when you create methods, their binary code is loaded only once in a special readonly area called code segment.
+    when you call it complier secretly adds this pointer that holds the memory address of that object.
+
+    obj1.methodOne(10) => methodOne(&obj1, 10);
+
+    if you write like , Player p1; then CPU will allocates memory where you're standing.
+    if you write like, Player* p2 = new Player() then it will allocates memroy in heap area and return the 8-byte pointer.
+
+    Everytime object is created(whether on stack or heap), c++ automatically fires a special function called constructor.
+    Everytime object is destroyed, c++ automatically fires a special function called destructor.
+
+    constructor has same name as classname and destructor has classname followed by ~ symbol. you can assign default values, start connections inside constructors. and you can cleanup the memory or close the connections inside destructor.
+
+    To know how smart pointer works under the hood, check lifecycle.cpp inside repo of c++
