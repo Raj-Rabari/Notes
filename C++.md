@@ -103,3 +103,23 @@ flaws of pointer:
     constructor has same name as classname and destructor has classname followed by ~ symbol. you can assign default values, start connections inside constructors. and you can cleanup the memory or close the connections inside destructor.
 
     To know how smart pointer works under the hood, check lifecycle.cpp inside repo of c++
+
+# accessing the properties using dot(.) notation vs -> operator
+
+    reference means you can think of it as a dereferenced pointer variable.
+
+    when you have reference to the memory box, means the box it self then you can use the dot(.) operator because you have actual box and you can look into it.
+
+    but when you have pointer variable, things work differenctly. Pointer variable holds memory address to the object's memory box. so if you do like ptr_var.abc then you won't get the abc because ptr_abc holds the address(hexaDecimal number) which doesn't have abc. so you have to dereference it using and then access abc like *(ptr_var).abc . so ptr_var->abc is syntactic sugar to *(ptr_var).abc
+
+# The std::vector (The dynamic array)
+
+    Problem with raw Array:
+        when you do new int[5], it creats 5 continuous boxes which can hold 4 byte data and returns pointer to it. But it can't grow, it doesn't know it's own size etc are the problems.
+
+    Vector is beatifully written class, that can grow, knows it's size and provide other functionalities which makes developer's life easy.
+
+    Vector:
+        => It lives on stack.
+        => It internally holds a raw pointer to block of heap memory
+        => when you add too many items, it simply pauses the program asks OS for bigger chunk of heap memory, copies the existing data to new one and deletes the old one.
