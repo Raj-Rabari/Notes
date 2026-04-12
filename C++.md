@@ -123,3 +123,112 @@ flaws of pointer:
         => It lives on stack.
         => It internally holds a raw pointer to block of heap memory
         => when you add too many items, it simply pauses the program asks OS for bigger chunk of heap memory, copies the existing data to new one and deletes the old one.
+
+# std:unordered_map O(1) lookup.
+
+    At hardware level CPU still understands, the standard array(continuous memory). you cannot ask RAM "go to the index named 'Aadarsh'.". RAM only understands numeric addresses. Then how it finds the value instantly.
+
+    When you insert any key value pair, it uses hash function(an mathematical function) that generates massive deterministic integer based on key. The map has hidden raw array underneath (called bucket). It finds massive_integer % size_of_bucket. and place the value there. again when you tries to access that value it does the same thing and find the index and get the value.
+
+# auto keyword:
+
+    when you don't know the type of value you're trying to access you can use auto keyword. It tells compiler: "figure out the data type of the value on the right side by yourself and assign it".
+
+# const keyword:
+
+    when you write const keyword after the paranthesis of any method, you're making the entire object readonly. If you pass const reference of any object to any other function or method. the compiler only allows you to call the method with const keyword. because you're using const reference to the object and if you call the method of it's who doesn't have const keyword after the paranthesis then that method might mutate the object.
+
+    printStatus() const { } // when you write like this compiler secretly passes the const this to this method so it won't allow to mutate the object.
+
+# lvalue & rvalue:
+
+    lvalue: named variable. It has an guaranteed, identifiable memory address on your RAM which can persist beyond the current line of code.
+    rvalue: It doesn't have permenent memory address. It usually exists fleetingly inside the CPU's internal registers, just long enough to evaluate an expression, and then it is destroyed instantly.
+
+    Golden rule: if you can put & before it then it is lvalue, else it is rvalue.
+
+    int age = 25;
+
+// 'age' is an lvalue. It lives in RAM. This works perfectly:
+int\* ptr = &age;
+
+// '25' is an rvalue. It's just a raw number in the CPU.
+// This causes a FATAL COMPILER ERROR:
+int\* ptr2 = &25;
+
+// (age + 5) is an rvalue. The math happens in the CPU register.
+// The result '30' has no permanent RAM address. ERROR:
+int\* ptr3 = &(age + 5);
+
+imagine you write function that generates massive vecotr with 1000000 records and then returns it like below:
+
+    std::vector<std::string> getMassiveDatabase() {
+    std::vector<std::string> tempDb;
+    // ... fill with 1,000,000 records ...
+    return tempDb;
+
+}
+
+// In main:
+std::vector<std::string> myDb = getMassiveDatabase();
+
+when getMassiveDatabase() returns, it spits out is a temporary, nameless object - an rvalue
+
+in older c++, when you assign that rvalue to an myDb(an lvalue), the compiler is forced to do a deep copy. It allocates new block of heap memory and copy all 1000000 records to it before destroying the rvalue. and it's too slow.
+
+in c++ 11, creators introduced a brilliant tool: the rvalue reference, written with double &(&&).
+
+Type& binds to lvalues
+Type&& binds to rvalue (temporary ro dying boxes)
+
+this allows developer to write completely new type of constructor called move constructors.
+
+A move constructor specifically looks for a ravlue and it tells compiler that the passed object is an rvalue, it is about to destroyed anyway. instead of doing a deep copy, just steal it's heap pointer. check move constructor example in move_constructor in your c++ repo.
+
+# noexcept keyword
+
+    if you add noexcept keyword after function paranthesis while providing definition you're promising compiler that this function will not gonna throw error.
+
+# Rule of five
+
+    If your class needs you to write desctructot to clean up the memory. Then It almost needs you to explicitly write out other four memory management functions.
+
+    1. destructor
+    2. standard constructor
+    3. copy constructor: deep copy the data when the object is born using rvalue like Class1 obj2 = obj1;
+    4. move constructor: to safely steal the pointer, triggered by object is born using Class1 obj2 = std::move(obj1);
+    5. copy assignment operator: to deep copy the data into existing object. obj2 = obj1;
+    6. move assignment operator: to steal the pointer into exisitng object. obj2 = std::move(obj1)
+
+# Rule of zero
+
+    If you strictly use smart pointers and STL containers then you can avoid rule of five as compiler automatically uses built-in rules of smart pointer to copy or move the data safely with zero memroy leaks.
+
+# Function Qualifier Sequence or Trailing Specifier area => FQS or TLA
+
+    Access_modifier return_type function_name(args) FQS or TLA {
+
+    }
+
+    1. const or valatile
+        const: locks the internal this pointer, promises compiler that method will not mutate the object state.
+        volatile: rarely used, mostly get used in embedded system. tells compiler that hardware might change the object's state.
+
+    2. The lvalue or rvalue restrictor
+        method_name() & or &&
+        & : method is only callable on named object(lvalue)
+        &&: method is only callable on rvalue (temporray or dying objects)
+
+    3. noexcpet : guarantess that this function never ever crash by throwing an error.
+
+    4. Trailing return type: ->
+
+     modern c++ allows you to write auto in place of return type ahead and then allows you to write the return type at the end like below.
+
+        auto sum(int a, int b) -> int { return a + b; };
+
+    5. inheritance controls:
+
+        override: tells compiler that i am reproviding the implementation of method from parent.
+        final: don't allows child class to override this method.
+        = 0: THe pure virtual specifier. It literally deletes function body and forces child classes to reprovide the implementation.
