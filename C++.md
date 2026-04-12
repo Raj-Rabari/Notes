@@ -232,3 +232,18 @@ A move constructor specifically looks for a ravlue and it tells compiler that th
         override: tells compiler that i am reproviding the implementation of method from parent.
         final: don't allows child class to override this method.
         = 0: THe pure virtual specifier. It literally deletes function body and forces child classes to reprovide the implementation.
+
+# templates
+
+    you can create generic functions or class for different datatypes in c++. templates when you write templates it takes almost zero bytes in final executables, until you're not using them. when you use template, let say on int then compiler copy-pastes the template code and replaces generic template type with the int, and so on.
+    This process is called template instantiation.
+
+    Pros: The maximum speed. because as the compiler hard codes the functions or classes for different data types it's zero guessing at runtime. That's why it's as fast as you have written the function for each data type by your hand. It completely bypasses slow v-table lookup we saw in polymorphism.
+
+    cons: If you use std::vector templates on int,double, string or any other datatypes. it copy pastes the source code for each data type. that's why some c++ executable files are too big and takes time to compile.
+
+# templates vs polimorphism(method overriding with virtual function):
+
+    templates: when you need a highly optimized container or algorithm that performs exact same logic for every data type, but you want to lock the data type before program runs (e.g Math matrix, sorting algos etc)
+
+    polimorphism: when you have collection of different object that need to interact dynamically while program is running.
