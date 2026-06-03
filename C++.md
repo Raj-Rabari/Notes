@@ -13,7 +13,7 @@ In higher level environment like python, java or javascript. When you declare a 
 differnce datatype require different amounts of memory, like char needs 1 byte and double(more precise decimal number) needs 8 bytes.
 
 & operator :
-using this variable you can get the physical adress of memory.
+using this operator you can get the physical adress of memory.
 
 Program execution flow:
 
@@ -38,7 +38,7 @@ Here are some use cases in which you can see use of pointer:
 
     Passing giant files or large data:
 
-        For data of data type int or char, it won't make any sense of 64 bit OS . because int data takes 4 byte and char needs 4 bytes. while on 64 bit system memory address is too long and require 8 bytes.
+        For data of datatype int or char, it won't make any sense of 64 bit OS . because int data takes 4 byte and char needs 4 bytes. while on 64 bit system memory address is too long and require 8 bytes.
 
         But for large data it will very useful. here is how: As execution of any function starts c++ engine creates brand new execution context or stack memory area for that function to store it's args and local variables. when you call the function, C++ copies the data in the memory of that function. So now you can't change the data outside of this function and copying large data will be expensive. So here pointer comes in picture. you can pass pointer variables to the function, so now you can change the value stored in that memory address. And when the function execution starts it only copies the pointer variable (the address) in function's stack frame so the big data (file of 2GB) won't get copied again in the function and we can save here more time and memory.
 

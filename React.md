@@ -135,7 +135,7 @@ It's been used when ref is forwarded to the component that wants to expose the f
 
 ## implement React router:
 
-one library you can use is react-router. this gives you functions to createmultiple router like createBrowserRouter(), createHashRouter() etc. you can call it like below.
+one library you can use is react-router. this gives you functions to create multiple router like createBrowserRouter(), createHashRouter() etc. you can call it like below.
 
 const router = createBrowserRouter({
 path: '',
